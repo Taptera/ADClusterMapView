@@ -55,8 +55,6 @@
         [_clusterAnnotationsPool addObject:annotation];
         [annotation release];
     }
-    [super addAnnotations:_singleAnnotationsPool];
-    [super addAnnotations:_clusterAnnotationsPool];
     
     double gamma = 1.0; // default value
     if ([_secondaryDelegate respondsToSelector:@selector(clusterDiscriminationPowerForMapView:)]) {
@@ -79,6 +77,10 @@
         _rootMapCluster = [[ADMapCluster rootClusterForAnnotations:mapPointAnnotations gamma:gamma clusterTitle:clusterTitle] retain];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self _clusterInMapRect:self.visibleMapRect];
+            
+            [super addAnnotations:_singleAnnotationsPool];
+            [super addAnnotations:_clusterAnnotationsPool];
+            
             if ([_secondaryDelegate respondsToSelector:@selector(mapViewDidFinishClustering:)]) {
                 [_secondaryDelegate mapViewDidFinishClustering:self];
             }
